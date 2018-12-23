@@ -40,4 +40,4 @@ def perform_action(string,action):
 		out_string = string[::-1]
 	return out_string
 
-app.run()
+app.run(host="0.0.0.0")
