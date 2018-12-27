@@ -1,0 +1,62 @@
+file:
+  /app/api/api.py:
+    exists: true
+    mode: "0700"
+package:
+  python:
+    installed: true
+port:
+  tcp:8080:
+    listening: true
+    ip:
+    - 0.0.0.0
+process:
+  python:
+    running: true
+http:
+  http://localhost:8080:
+    status: 200
+    timeout: 5000
+    body:
+    - hello world
+http:
+  http://localhost:8080/hello:
+    status: 200
+    timeout: 5000
+    body:
+    - hello
+  http://localhost:8080/world:
+    status: 200
+    timeout: 5000
+    body:
+    - world
+  http://localhost:8080?action=uppercase:
+    status: 200
+    timeout: 5000
+    body:
+    - HELLO WORLD
+  http://localhost:8080/hello?action=uppercase:
+    status: 200
+    timeout: 5000
+    body:
+    - HELLO
+  http://localhost:8080/world?action=uppercase:
+    status: 200
+    timeout: 5000
+    body:
+    - WORLD
+  http://localhost:8080?action=reverse:
+    status: 200
+    timeout: 5000
+    body:
+    - dlrow olleh
+  http://localhost:8080/hello?action=reverse:
+    status: 200
+    timeout: 5000
+    body:
+    - olleh
+  http://localhost:8080/world?action=reverse:
+    status: 200
+    timeout: 5000
+    body:
+    - dlrow
