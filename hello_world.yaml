@@ -14,5 +14,8 @@ Resources:
             systemctl start docker
             systemctl enable docker
             wget https://github.com/raghualapati/httpserver/raw/master/Dockerfile
-            docker build -t raghu/app .
-            docker run -itd -p 8080:8080 raghu/app
+            sudo docker build -t raghu/app .
+            sudo docker run -itd -p 8080:8080 raghu/app
+Outputs:
+  EC2:
+    value:
