@@ -16,6 +16,3 @@ Resources:
             wget https://github.com/raghualapati/httpserver/raw/master/Dockerfile
             sudo docker build -t raghu/app .
             sudo docker run -itd -p 8080:8080 raghu/app
-Outputs:
-  EC2:
-    value:
