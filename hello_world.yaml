@@ -12,6 +12,11 @@ Resources:
             amazon-linux-extras install docker -y
             systemctl start docker
             systemctl enable docker
-            wget https://github.com/raghualapati/httpserver/raw/master/Dockerfile
+            sudo wget https://github.com/raghualapati/httpserver/raw/master/Dockerfile
             sudo docker build -t raghu/app .
             sudo docker run -itd -p 8080:8080 raghu/app
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          commands: "sudo wget https://github.com/raghualapati/httpserver/raw/master/Dockerfile"
+          
