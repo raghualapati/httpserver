@@ -5,17 +5,17 @@ Resources:
     Metadata:
       AWS::CloudFormation::Init:
         config:
-          files:
-            /helloworld.tar:
-              source: "https://s3-us-west-2.amazonaws.com/artifactory-docker/helloworld.tar"
-              mode: "000777"
-              owner: "root"
-              group: "root"
           commands:
             Install:
               command: "sudo amazon-linux-extras install docker -y"
             Start:
               command: "sudo systemctl start docker"
+            Downloadartifact:
+              command: "sudo wget https://s3-us-west-2.amazonaws.com/artifactory-docker/helloworld.tar"
+            Unzipartifact:
+              command: "sudo cat helloworld.tar | docker import - hello_world/app"
+            Deploycontainer:
+              command: "sudo docker run -itd -p 8080:8080 hello_world/app /bin/bash"
     Properties:
       ImageId: "ami-01bbe152bf19d0289"
       InstanceType: t2.micro
@@ -27,4 +27,4 @@ Resources:
 Outputs:
   WebsiteURL:
     Description: The URL pointing the webserver
-    Value: !Sub http://${EC2Instance.PublicIp}
+    Value: !Sub http://${EC2Instance.PublicIp}:8080
