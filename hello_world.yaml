@@ -1,22 +1,26 @@
+---
 Resources:
-  EC2:
-    Type: "AWS::EC2::Instance"
-    Properties:
-      ImageId: "ami-01bbe152bf19d0289"
-      InstanceType: "t2.micro"
-      KeyName: "raghu_jenkins"
-      UserData:
-        "Fn::Base64":
-          !Sub |
-            #!/bin/bash
-            amazon-linux-extras install docker -y
-            systemctl start docker
-            systemctl enable docker
-            sudo wget https://github.com/raghualapati/httpserver/raw/master/Dockerfile
-            sudo docker build -t raghu/app .
-            sudo docker run -itd -p 8080:8080 raghu/app
+  EC2Instance:
+    Type: AWS::EC2::Instance
     Metadata:
       AWS::CloudFormation::Init:
         config:
-          commands: "sudo wget https://github.com/raghualapati/httpserver/raw/master/Dockerfile"
-          
+          commands:
+            Install:
+              command: "sudo amazon-linux-extras install docker -y"
+            Start:
+              command: "sudo systemctl start docker"
+            DownloadDocker:
+              command: "wget https://s3-us-west-2.amazonaws.com/artifactory-docker/helloworld.tar"
+    Properties:
+      ImageId: "ami-01bbe152bf19d0289"
+      InstanceType: t2.micro
+      KeyName: "raghu_jenkins"
+      UserData:
+        'Fn::Base64': !Sub |
+          #!/bin/bash -ex
+          /opt/aws/bin/cfn-init -s ${AWS::StackName} -r EC2Instance --region ${AWS::Region}
+Outputs:
+  WebsiteURL:
+    Description: The URL pointing the webserver
+    Value: !Sub http://${EC2Instance.PublicIp}
