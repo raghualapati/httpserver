@@ -15,7 +15,7 @@ Resources:
             ChangePermission:
               command: "sudo chmod 777 helloworld.tar"
             Unzipartifact:
-              command: "sudo cat helloworld.tar | docker import - hello_world/app"
+              command: "cat helloworld.tar | sudo docker import - hello_world/app"
             Deploycontainer:
               command: "sudo docker run -itd -p 8080:8080 hello_world/app /bin/bash"
     Properties:
