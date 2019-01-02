@@ -5,6 +5,12 @@ Resources:
     Metadata:
       AWS::CloudFormation::Init:
         config:
+          files:
+            /helloworld.tar:
+              source: "https://s3-us-west-2.amazonaws.com/artifactory-docker/helloworld.tar"
+              mode: "000777"
+              owner: "root"
+              group: "root"
           commands:
             Install:
               command: "sudo amazon-linux-extras install docker -y"
