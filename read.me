@@ -1,0 +1,42 @@
+Running the Application Container:
+The api is developed in python using flask frame work. The code for the API is available in the below path.
+https://github.com/raghualapati/httpserver/blob/master/api.py
+As instructed in the assignment the api present the following out as mentioned below.
+1.Method “/” - response : hello world
+2.Method “/hello” – response : hello
+3.Method “/world” – response : world
+The api also accepts a query string with the name of action and would take two values for action and they would be “uppercase” and “reverse” in the below given manner.
+action=uppercase or action=reverse
+ex: http://localhost:8080/?action=reverse  response : dlrow olleh
+Based on the query parameters passed the response of the api would be updated, we would get the response in upper case if action is uppercase and the response in reverse if the action in reversed.
+The api is built in a Centos image and the Dockerfile for which is available in the below path.
+https://github.com/raghualapati/httpserver/blob/master/Dockerfile
+To run this container, we would just need to download the Dockerfile and run the below set of commands to bring the container up.
+1.	To build the docker images from the docker file.
+docker build -t raghu/app . (we would have to have the docker installed and the docker service up before running this command and the docker file to be present in the same directory where the command is being executed form, If not we can pass the complete path of the Dockerfile instead of .)
+2.	To start the container
+Docker run -itd -p 8080:8080 raghu/app (This would launch the container in the daemon mode and expose the port 8080 of the container where the api is running to the localhost port 8080)
+Once these two commands are executed we can then access the api using the below URL.
+http://localhost:8080/
+
+
+Testing the container along with the application:
+I have used the dgoss and goss for testing the container along with the application.
+If they are not installed on your machine and you would like to run the test case manually they can be installed using the below command.
+curl -fsSL https://goss.rocks/install | sudo sh
+This will install both dgoss and goss together.
+The test for the container and the application are written in the goss.yaml file which is available in the below path
+https://github.com/raghualapati/httpserver/blob/master/goss.yaml
+This test file makes sure the required packages and files and services are available once the container is started and also test the response for all the valid api calls.
+To test the container, we can use the command as below.
+dgoss run -p 8020:8080 <<image name that has already been built>> (Before we can run this command we need to have the image raghu/app available and this command has to be executed form the directory where the goss.yaml file is present)
+
+
+Continuous Integration:
+As instructed in assignment, I have used the Jenkins Docker CI for the Jenkins and below is the location of the Docker compose file to start the local instance of the Jenkins from this image. Once the Jenkins is up and running I have installed the required plugins and configured the git hooks and created a Jenkins pipe line job to build, test and deploy the container on to an AWS EC2 instance.
+https://github.com/raghualapati/ci_build/blob/master/docker-compose.yml
+The Jenkinsfile for the pipeline job is available in the below location.
+https://github.com/raghualapati/ci_build/blob/master/Jenkinsfile.
+And the Jenkins instance running can be accessible using the below URL and the login details are mentioned as below.
+http://35.166.205.72:8080
+Jenkins has it slaves defined as AWS EC2 instances and Jenkins was configured to automatically launch the EC2 instances on demand and terminate them if they are not being used for build.

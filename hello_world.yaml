@@ -5,21 +5,24 @@ Resources:
     Metadata:
       AWS::CloudFormation::Init:
         config:
+          files:
+            /var/tmp/helloworld.tar:
+              source: "https://s3-us-west-2.amazonaws.com/artifactory-docker/helloworld.tar"
+              mode: "000777"
+              
           commands:
             Install:
               command: "sudo amazon-linux-extras install docker -y"
             GrantExecute:
               command: "sudo usermod -aG docker ec2-user"
             Start:
-              command: "systemctl start docker"
+              command: "sudo systemctl start docker"
             Downloadartifact:
               command: "sudo wget https://s3-us-west-2.amazonaws.com/artifactory-docker/helloworld.tar"
             ChangePermission:
-              command: "chmod 777 helloworld.tar"
+              command: "sudo chmod 0777 helloworld.tar"
             Unzipartifact:
-              command: "helloworld.tar | docker import - hello_world/app"
-            Deploycontainer:
-              command: "docker run -itd -p 8080:8080 hello_world/app /bin/bash"
+              command: "cat helloworld.tar | docker import - hello_world/app"
     Properties:
       ImageId: "ami-01bbe152bf19d0289"
       InstanceType: t2.micro
