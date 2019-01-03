@@ -11,18 +11,14 @@ Resources:
               mode: "000777"
               
           commands:
-            Install:
+            step1:
               command: "sudo amazon-linux-extras install docker -y"
-            GrantExecute:
-              command: "sudo usermod -aG docker ec2-user"
-            Start:
+            step2:
               command: "sudo systemctl start docker"
-            Downloadartifact:
-              command: "sudo wget https://s3-us-west-2.amazonaws.com/artifactory-docker/helloworld.tar"
-            ChangePermission:
-              command: "sudo chmod 0777 helloworld.tar"
-            Unzipartifact:
-              command: "cat helloworld.tar | docker import - hello_world/app"
+            step3:
+              command: "sudo cat /var/tmp/helloworld.tar | sudo docker import - hello_world/app ; sleep 20"
+            step4:
+              command: "sudo docker run -itd -p 8080:8080 hello_world/app python /app/api/api.py"
     Properties:
       ImageId: "ami-01bbe152bf19d0289"
       InstanceType: t2.micro
